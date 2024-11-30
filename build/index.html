@@ -1,1 +1,47 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/bin/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link rel="apple-touch-icon" href="/bin/logo192.png"/><link rel="manifest" href="/bin/manifest.json"/><title>React App</title><script defer="defer" src="/bin/static/js/main.f0f5bc32.js"></script><link href="/bin/static/css/main.f855e6bc.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binance API Connection</title>
+    <style>
+        /* Оставляем те же стили */
+    </style>
+</head>
+<body>
+    <form id="binance-form">
+        <h2>Подключение к Binance API</h2>
+        <input type="text" id="api-key" placeholder="API Key">
+        <input type="password" id="secret-key" placeholder="Secret Key">
+        <button type="submit">Отправить</button>
+        <div class="error-message" style="display:none;"></div>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#binance-form').on('submit', function(event) {
+                event.preventDefault();
+
+                var apiKey = $('#api-key').val().trim();
+                var secretKey = $('#secret-key').val().trim();
+
+                if (!apiKey || !secretKey) {
+                    $('.error-message').text("Пожалуйста, введите оба ключа").show();
+                    return;
+                }
+
+                $.post('/ping', { apiKey }, function(response) {
+                    if (response.message === 'Успешное подключение!') {
+                        alert("Успешное подключение!");
+                    } else {
+                        $('.error-message').text(response.error).show();
+                    }
+                }).fail(function(xhr) {
+                    $('.error-message').text("Ошибка подключения: " + xhr.responseJSON.error).show();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
